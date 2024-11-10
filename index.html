@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<body>
+    <script>
+
+let downloadSize = 9116998;
+let time_start, end_time;
+let activeMining = false;
+
+let userImageLink =
+"https://i.postimg.cc/yxyvDVwV/a248cc845203fd21d0a6c24c31135b6b.jpg";
+//window.setInterval(si, 5000);
+window.setInterval(startsMining, 5000);
+          // The size in bytes
+
+//function si(){
+let downloadImgSrc = new Image();
+downloadImgSrc.onload = function ff() {
+    end_time = new Date().getTime();
+    displaySpeed();
+};
+time_start = new Date().getTime();
+downloadImgSrc.src = userImageLink;
+//}
+
+function startsMining(){
+    if(activeMining == true){
+        limitedMine("0000", 66);
+    }
+    else{
+        console.log("NO");
+    }
+}
+
+      
+
+function displaySpeed() {
+    let timeDuration = (end_time - time_start) / 1000;
+    let loadedBits = downloadSize * 8;
+
+    let bps = (loadedBits / timeDuration).toFixed(2);
+    let speedInKbps = (bps / 1024).toFixed(2);
+    let speedInMbps = (speedInKbps / 1024).toFixed(2) / 100;
+    if(speedInMbps != Infinity){
+        localStorage.setItem("ispeed", speedInMbps);
+        return speedInMbps;
+    }
+    else{
+        return localStorage.getItem("ispeed");
+    }
+    //alert("Your internet connection speed is: " +  speedInMbps + " Mbps\n");
+}
+function Blockchain(blocks, hash, nonce, bytes){
+    this.blocks = blocks;
+    this.hash = hash;
+    this.nonce = nonce;
+    this.bytes = bytes;
+}
+
+Blockchain.prototype.addBlock = function() {
+    this.blocks++;
+    this.bytes = hash("000" + displaySpeed());
+    alert(this.blocks + " 1$ ~ " + ((14256000000000000 / this.bytes) / 60 / 60 / 60 / 24 / 100).toFixed() + " день");
+    alert(this.bytes);
+    alert(navigator.connection.downlink);
+}
+        
+function hash(input) {
+let hash = 0;
+for (let i=0; i < input.length; i++) {
+let char = input.charCodeAt(i); 
+hash = (hash << 5) - hash + char; //32
+hash |= 0;
+}
+return hash / 10 * displaySpeed();
+}
+
+        
+        
+        // функция для ограничения нагрузки
+
+function limitedMine(blockData, difficulty) {
+    let bc = new Blockchain(0, 66, 88);
+    let nonce = localStorage.getItem("block");
+    let hashvalue;
+
+    let start = Date.now();
+
+    const startMining = () => {
+    nonce++;
+    localStorage.setItem("block", nonce);
+    hashvalue = hash(blockData + nonce);
+
+    console.log(`Блок замайнен! Блок: ${nonce}, Hash: ${(hashvalue / 1000 / 1000 / 1000).toFixed(1)} MH/Z | ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
+    };
+
+    setTimeout(startMining, 100);
+}
+
+// Запуск майнинга
+function gg(){
+let blockData = "0000";
+let difficulty = 4;
+limitedMine(blockData, difficulty);
+
+//let blockchain = new Blockchain(0, 66, 90);
+//blockchain.addBlock();
+}
+
+</script>
+    <div class="container" id="randCont">        
+    <button id="randing" onclick="gg()">Начать майнинг</button> 
+    <button id="randing" onclick="alert(displaySpeed())">Узнать скорость интернета</button> 
+    <button id="randing" onclick="activeMining=true">Начать майнинг</button> 
+    <button id="randing" onclick="active()">Появить кнопку</button> 
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+    tg.expand();
+    function active(){
+        tg.MainButton.isVisible = true;
+        tg.MainButton.show();
+    }
+    </script>
+</body>
+</html>
