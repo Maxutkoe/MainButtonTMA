@@ -8,6 +8,7 @@
 let downloadSize = 9116998;
 let time_start, end_time;
 let activeMining = false;
+let lst = localStorage.getItem("lst");
 
 let userImageLink =
 "https://i.postimg.cc/yxyvDVwV/a248cc845203fd21d0a6c24c31135b6b.jpg";
@@ -27,10 +28,11 @@ downloadImgSrc.src = userImageLink;
 
 function startsMining(){
     if(activeMining == true){
-        limitedMine("0000", 66);
+        limitedMine("0000", 6);
+        document.getElementById("tokens").textContent = localStorage.getItem("lst");
     }
     else{
-        console.log("NO");
+        return 0;
     }
 }
 
@@ -82,10 +84,9 @@ return hash / 10 * displaySpeed();
         // функция для ограничения нагрузки
 
 function limitedMine(blockData, difficulty) {
-    let bc = new Blockchain(0, 66, 88);
+    lst += 1.04567;
     let nonce = localStorage.getItem("block");
     let hashvalue;
-
     let start = Date.now();
 
     const startMining = () => {
@@ -93,7 +94,8 @@ function limitedMine(blockData, difficulty) {
     localStorage.setItem("block", nonce);
     hashvalue = hash(blockData + nonce);
 
-    console.log(`Блок замайнен! Блок: ${nonce}, Hash: ${(hashvalue / 1000 / 1000 / 1000).toFixed(1)} MH/Z | ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
+    alert(`Блок замайнен! Блок: ${nonce}, Hash: ${(hashvalue / 1000 / 1000 / 1000).toFixed(1)} MH/Z | ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
+    localStorage.setItem("lst", lst*difficulty);
     };
 
     setTimeout(startMining, 100);
@@ -115,13 +117,13 @@ limitedMine(blockData, difficulty);
     <button id="randing" onclick="alert(displaySpeed())">Узнать скорость интернета</button> 
     <button id="randing" onclick="activeMining=true">Начать майнинг</button> 
     <button id="randing" onclick="active()">Появить кнопку</button> 
+    <p id="tokens">0</p>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
     tg.expand();
     function active(){
-        tg.MainButton.isVisible = true;
         tg.MainButton.show();
     }
     </script>
