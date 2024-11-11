@@ -7,16 +7,15 @@
 
 let downloadSize = 9116998;
 let time_start, end_time;
-let activeMining = false;
-let lst = localStorage.getItem("lst");
+let activeMining = true;
+let lst = localStorage.getItem("gg");
 
 let userImageLink =
 "https://i.postimg.cc/yxyvDVwV/a248cc845203fd21d0a6c24c31135b6b.jpg";
-//window.setInterval(si, 5000);
-window.setInterval(startsMining, 5000);
+window.setInterval(si, 3000);
           // The size in bytes
 
-//function si(){
+function si(){
 let downloadImgSrc = new Image();
 downloadImgSrc.onload = function ff() {
     end_time = new Date().getTime();
@@ -24,15 +23,17 @@ downloadImgSrc.onload = function ff() {
 };
 time_start = new Date().getTime();
 downloadImgSrc.src = userImageLink;
-//}
+}
 
 function startsMining(){
     if(activeMining == true){
-        limitedMine("0000", 6);
-        document.getElementById("tokens").textContent = localStorage.getItem("lst");
+        setTimeout(limitedMine("000", 6), 1000);
+        document.querySelector("#tokens").innerHTML = localStorage.getItem("gg");
+        console.log("yes");
+        setTimeout(startsMining, 10000);
     }
     else{
-        return 0;
+        console.log("no");
     }
 }
 
@@ -45,14 +46,13 @@ function displaySpeed() {
     let bps = (loadedBits / timeDuration).toFixed(2);
     let speedInKbps = (bps / 1024).toFixed(2);
     let speedInMbps = (speedInKbps / 1024).toFixed(2) / 100;
-    if(speedInMbps != Infinity){
-        localStorage.setItem("ispeed", speedInMbps);
-        return speedInMbps;
+    console.log(speedInKbps);
+    if(speedInMbps == Infinity){
+        return navigator.connection.downlink;
     }
     else{
-        return localStorage.getItem("ispeed");
+        return speedInMbps;
     }
-    //alert("Your internet connection speed is: " +  speedInMbps + " Mbps\n");
 }
 function Blockchain(blocks, hash, nonce, bytes){
     this.blocks = blocks;
@@ -76,7 +76,7 @@ let char = input.charCodeAt(i);
 hash = (hash << 5) - hash + char; //32
 hash |= 0;
 }
-return hash / 10 * displaySpeed();
+return hash / 100 * displaySpeed(); //из за Infinity ошибка
 }
 
         
@@ -84,7 +84,7 @@ return hash / 10 * displaySpeed();
         // функция для ограничения нагрузки
 
 function limitedMine(blockData, difficulty) {
-    lst += 1.04567;
+    let bonus = 1.04567;
     let nonce = localStorage.getItem("block");
     let hashvalue;
     let start = Date.now();
@@ -94,8 +94,10 @@ function limitedMine(blockData, difficulty) {
     localStorage.setItem("block", nonce);
     hashvalue = hash(blockData + nonce);
 
-    alert(`Блок замайнен! Блок: ${nonce}, Hash: ${(hashvalue / 1000 / 1000 / 1000).toFixed(1)} MH/Z | ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
-    localStorage.setItem("lst", lst*difficulty);
+    alert(`Блок замайнен! Блок: ${nonce}, Hash: ${(hashvalue / 1000 / 1000 / 100).toFixed(1)} MH/Z | ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
+    reward = bonus * ((hashvalue / 1000 / 1000 / 1000) * difficulty / 5); //7.4
+    lst = parseFloat(lst) + reward;
+    localStorage.setItem("gg", lst);
     };
 
     setTimeout(startMining, 100);
@@ -103,9 +105,14 @@ function limitedMine(blockData, difficulty) {
 
 // Запуск майнинга
 function gg(){
-let blockData = "0000";
-let difficulty = 4;
-limitedMine(blockData, difficulty);
+let blockData = "000";
+let nonce = localStorage.getItem("block");
+let difficulty = 6;
+// // limitedMine(blockData, difficulty);
+hashvalue = hash(blockData + nonce);
+// lstlst = (1.04567 / 6) * (hashvalue / 1000 / 1000 / 1000);
+// alert(1.04567 + (6 / (hashvalue / 1000 / 1000 / 10000))); //7.4);
+alert(hashvalue / 1000 / 1000 / 10000);
 
 //let blockchain = new Blockchain(0, 66, 90);
 //blockchain.addBlock();
@@ -115,9 +122,9 @@ limitedMine(blockData, difficulty);
     <div class="container" id="randCont">        
     <button id="randing" onclick="gg()">Начать майнинг</button> 
     <button id="randing" onclick="alert(displaySpeed())">Узнать скорость интернета</button> 
-    <button id="randing" onclick="activeMining=true">Начать майнинг</button> 
+    <button id="randing" onclick="startsMining()">Начать майнинг</button> 
     <button id="randing" onclick="active()">Появить кнопку</button> 
-    <p id="tokens">0</p>
+    <div id="tokens">0</div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
